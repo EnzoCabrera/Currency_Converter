@@ -1,10 +1,27 @@
 import 'package:conversor_moeda/app/components/currency_box.dart';
+import 'package:conversor_moeda/app/controllers/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final TextEditingController toText = TextEditingController();
+
+  final TextEditingController fromText = TextEditingController();
+  HomeController homeController;
+
+  @override
+  void initState() {
+    super.initState();
+    homeController = HomeController(toText: toText, fromText: fromText);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +40,26 @@ class HomeView extends StatelessWidget {
                 height: 150,
               ),
               SizedBox(height: 50),
-              CurrencyBox(),
+              CurrencyBox(
+                  items: homeController.currencies,
+                  onChanged: (model) {
+                    setState(() {
+                      homeController.toCurrency = model;
+                    });
+                  },
+                  controller: toText,
+                  selectedItem: homeController.toCurrency),
               SizedBox(height: 10),
-              CurrencyBox(),
+              CurrencyBox(
+                  items: homeController.currencies,
+                  onChanged: (model) {
+                    setState(() {
+                      homeController.fromCurrency = model;
+                    });
+                  },
+                  controller: fromText,
+                  selectedItem: homeController.fromCurrency),
+              SizedBox(height: 10),
               SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {},
